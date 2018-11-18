@@ -1,6 +1,6 @@
 ---
 title: "Social Survey 2010"
-author: "Put your name here!"
+author: "Erick Cooper"
 date: "Fall 2018"
 output:
   html_document:
@@ -17,11 +17,15 @@ require(tigerstats)
 
 <!--In this section you explain what you are trying to show.  Where did the data come from?  What is the research or other question you are trying to answer?!-->
 
-Use the data from the 2010 general social survey to explore whether belief in continental drift (condrift), views on capitol punishment (cappun), and race (race) are independent of each other.
+  We are going to use the data from the 2010 general social survey to explore whether belief in continental drift (condrift), views on capitol punishment (cappun), and race (race) are independent of each other.
+
+
 
 # Methods
 
 <!--Decide on your methods:  use "variable analysis" or other appropriate descriptors.  Make sure to choose at least one graphical method and at least one numerical method.!-->
+
+  Using barcharts we can easily determine visibly if there is a dependence or not. We will also perform a chi squaare test to determine a p-value so we can either accept or reject the null hypothesis.
 
 #Results
 
@@ -42,17 +46,77 @@ alldata <- read.csv(file="gss2010.csv", header=TRUE)
 ```{r}
 barchartGC(~race+condrift, data=alldata, type = "percent") 
 ```
+  Visual results independent
 
+```{r}
+barchartGC(~race+cappun, data=alldata, type = "percent") 
+```
+  Visual results dependent
 
+```{r}
+barchartGC(~cappun+condrift, data=alldata, type = "percent") 
+```
+  Visual results independent 
+  
 ### Numerical Descriptive Results
 
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
 
+```{r}
+Cappunvcondrift <- xtabs(~cappun+condrift,data=alldata)
+Cappunvcondrift
+```
+
+```{r}
+chisqtestGC(~cappun+condrift,data=alldata)
+```
+
+
+```{r}
+racevcappun <- xtabs(~race+cappun,data=alldata)
+racevcappun
+```
+
+```{r}
+chisqtestGC(~race+cappun,data=alldata)
+```
+
+
+```{r}
+racevcondrift <- xtabs(~race+condrift,data=alldata)
+racevcondrift
+```
+
+```{r}
+chisqtestGC(~race+condrift,data=alldata)
+```
+
+
 ## Inferential Results
 
 <!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
+  
+$H_0$ Believing in continental drift and capitol punishment are independent of each other 
+  
+$H_U$ Believing in continental drift and capital punishment are dependent of each other
 
+  Visual results from the bar charts implies that the two are independent of each other. The chi square test results revealed a p-value of 0.7919 which is > 0.05. So we accept the null hypothesis.
+
+$H_0$ Believing in capital punishment and race are independent of each other
+
+$H_U$ Believing in capital punishment and race are dependent of each other
+
+  Visual results from the bar charts implies that the two are dependent of each other in the cases of blacks and others but no with white people. This implies that capital punishment and other races are dependent but not with white people. The chi square test results revealed a p-value of 0 which is < 0.05. So we can reject the null hypothesis in the case of white people but accept it with the other races.
+
+
+$H_0$ Believing in continental drift and race are independent of each other
+
+$H_U$ Believing in continental drift and race are dependent of each other
+
+  Visual results from the bar charts implies that the two are independent of each other. The chi square test results revealed a p-value of 0 which is < 0.05. So reject the null hypothesis.
 
 # Discussion and Conclusion
 
 <!--Discussion and conclusion here.  If you found a relationship be sure to consider whether the relationship occurs because one of the variavbles causes the other, or whether they perhasps are related for some other reason.  Watch the chapter 6 videos from the GeorgeTown videos collection.!-->
+
+  Results varied a little in one analysis but was predominantly found that they were independent of the other factor. In the case of the exception, the white people and capitol punishment were unrelated but black people and other races view on capitol punishment were dependent on each other (most likely becasue minorities face prison time and white people get off in the same cases of crime). The chi square test helped to create a p-value to determine most of this but graphical analysis was needed to infer race and capitol punishment dependency.
